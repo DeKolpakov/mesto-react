@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
-import PopupWithImage from "./PopupWithImage";
+import ImagePopup from "./ImagePopup";
 
 function App() {
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
@@ -52,7 +52,7 @@ function App() {
 
       <Footer />
 
-      <PopupWithImage
+      <ImagePopup
         card={selectedCard}
         //isOpen={isFullImagePopupOpen}
         onClose={closeAllPopups}
@@ -65,6 +65,7 @@ function App() {
         title="Редактировать профиль"
         isOpen={isProfilePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         {
           <>
@@ -81,6 +82,7 @@ function App() {
         title="Обновить аватар"
         isOpen={isAvatarPopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         {
           <>
@@ -95,6 +97,7 @@ function App() {
         title="Новое место"
         isOpen={isAddImagePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Создать"
       >
         {
           <>
@@ -110,6 +113,7 @@ function App() {
         name="delete"
         title="Вы уверены?"
         onClose={closeAllPopups}
+        buttonText="Да"
       >
         {}
       </PopupWithForm>

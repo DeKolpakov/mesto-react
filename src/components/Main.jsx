@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import api from '../utils/api';
 import Card from "./Card"
 
@@ -33,7 +33,6 @@ function Main(props) {
   }, [])
 
   return (
-    <>
       <main className="main">
         <section className="profile">
           <div className="profile__avatar">
@@ -54,9 +53,7 @@ function Main(props) {
         <section className="galery">
           {cards.map((card) => (<Card key={card._id} card={card} onCardClick={props.onCardClick} />))}
         </section>
-
       </main>
-    </>
   );
 }
 
