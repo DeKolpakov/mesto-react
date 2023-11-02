@@ -1,4 +1,4 @@
-import {apiKey} from "./apiKey";
+import {apiOptions} from "./apiOptions";
 
 class Api {
   constructor(data) {
@@ -23,7 +23,6 @@ class Api {
   }
 
   editUserInfo(data) {
-    //console.log(data);
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
       headers: this._headers,
@@ -37,7 +36,6 @@ class Api {
   //___AVATAR__________________________________________________________________________________
 
   editAvatar(data) {
-    //console.log(data.avatar)
     return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
@@ -67,7 +65,6 @@ class Api {
   }
 
   delCard(cardId) {
-    //console.log(cardId)
     return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
@@ -77,9 +74,7 @@ class Api {
   //_________________________________________________________________________________________
 
   changeLikeCardStatus(cardId, isLiked) {
-    //console.log(cardId)
     const methodLike = isLiked ? "PUT" : "DELETE";
-
     return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: methodLike,
       headers: this._headers,
@@ -87,6 +82,6 @@ class Api {
   }
 }
 
-const api = new Api(apiKey);
+const api = new Api(apiOptions);
 
 export default api;

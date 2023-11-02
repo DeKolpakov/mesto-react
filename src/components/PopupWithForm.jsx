@@ -1,25 +1,35 @@
 import React from "react";
 
-function PopupWithForm(props) {
-  //console.log(props.name)
+function PopupWithForm({name, title, isOpen, onClose, buttonText, onSubmit, children}) {
   return (
-    <div className={`popup popup_type_${props.name} ${props.isOpen ? "popup_opened" : ""}`}>
-      <div className={`popup__container popup__container_type_${props.name}`}>
-        <h2 className="popup__title">{props.title}</h2>
-        <button className="popup__button-close" type="button" onClick={props.onClose} aria-label="закрыть окно"></button>
+    <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>
+      <div className={`popup__container popup__container_type_${name}`}>
+        <h2 className="popup__title">{title}</h2>
+        <button
+          className="popup__button-close"
+          type="button"
+          onClick={onClose}
+          aria-label="закрыть окно"
+        />
 
-        <form className={`popup__form popup__form_type_${props.name}`} id={`${props.name}-form`} name={`${props.name}-form`} noValidate method="post" onSubmit={props.onSubmit}>
-          {props.children}
+        <form
+          className={`popup__form popup__form_type_${name}`}
+          id={`${name}-form`}
+          name={`${name}-form`}
+          noValidate
+          method="post"
+          onSubmit={onSubmit}
+        >
+          {children}
 
           <button
-            className={`popup__button-save popup__button-save_type_${props.name} popup__button-save_invalid`}
-            id={`submit-button-${props.name}`}
+            className={`popup__button-save popup__button-save_type_${name} popup__button-save_valid`}
+            id={`submit-button-${name}`}
             type="submit"
             aria-label="Подтверждение"
-
             //disabled
           >
-            {props.buttonText || "Сохранить"}
+            {buttonText || "Сохранить"}
           </button>
         </form>
       </div>

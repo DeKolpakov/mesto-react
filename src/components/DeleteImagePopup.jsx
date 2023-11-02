@@ -1,21 +1,20 @@
 import {React, useState} from "react";
 import PopupWithForm from "./PopupWithForm";
 
-export default function DeleteImagePopup(props) {
+export default function DeleteImagePopup({isOpen, onClose, onCardDelete, card}) {
+  //console.log(card)
 
-  //console.log(props)
-
-  /* function handleDeleteClick() {
-    props.onCardDelete(props.card);
-  } */
+  function handleDeleteClick() {
+    onCardDelete(card);
+  }
 
   return (
-    <PopupWithForm 
-      name="delete" 
-      title="Вы уверены?" 
-      isOpen={props.isOpen} 
-      onClose={props.onClose} 
-      //onSubmit={handleDeleteClick} 
+    <PopupWithForm
+      name="delete"
+      title="Вы уверены?"
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleDeleteClick}
       buttonText="Да"
     />
   );

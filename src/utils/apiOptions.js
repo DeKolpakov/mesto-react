@@ -1,4 +1,4 @@
-export const apiKey = {
+export const apiOptions = {
 
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-76',
 

@@ -4,16 +4,15 @@ import Header from "../components/Header";
 import Main from "./Main";
 import Footer from "./Footer";
 
-import PopupWithForm from "./PopupWithForm";
+//import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup"
-import DeleteImagePopup from "./DeleteImagePopup";
+import AddPlacePopup from "./AddPlacePopup";
+//import DeleteImagePopup from "./DeleteImagePopup";
 
 import api from "../utils/api";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -21,35 +20,25 @@ function App() {
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = useState(false);
   //const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState(null);
-  const [currentUser, setCurrentUser] = useState("");
+  const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.getProfileInfo()
+    Promise.all([api.getProfileInfo(), api.getCards()])
       .then((res) => {
         //console.log(res)
-        setCurrentUser(res)
+        const [profileInfo, cards] = res;
+        setCurrentUser(profileInfo);
+        setCards(cards);
       })
       .catch((err) => {
-        console.log(`Ошибка получения данных профиля: ${err}`);
-      })
-  }, [])
-
-  useEffect(() => {
-    api.getCards()
-      .then((res) => {
-        //console.log(res)
-        setCards(res)
-      })
-      .catch((err) => {
-        console.log(`Ошибка получения карточек: ${err}`);
-      }) 
-  }, [])
-
+        console.log(`Ошибка получения данных: ${err}`);
+      });
+  }, []);
 
   const handleCardClick = (card) => {
-    setSelectedCard(card)
-  }
+    setSelectedCard(card);
+  };
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -64,7 +53,7 @@ function App() {
   };
 
   function closeAllPopups() {
-    setSelectedCard(null)
+    setSelectedCard(null);
     setIsEditProfilePopupOpen(false);
     setIsAddImagePopupOpen(false);
     setIsAvatarPopupOpen(false);
@@ -72,29 +61,32 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked)
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((item) => item._id === card._id ? newCard : item));
+        setCards((state) => state.map((item) => (item._id === card._id ? newCard : item)));
       })
       .catch((error) => {
         console.error("Ошибка добавления лайка: ", error);
-      })
+      });
   }
 
   function handleCardDelete(card) {
-    api.delCard(card._id)
+    api
+      .delCard(card._id)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
       })
       .catch((error) => {
         console.error("Ошибка удаления карточки: ", error);
-      })
+      });
   }
 
   function handleUpdateUser(userData) {
     //console.log(userData)
-    api.editUserInfo(userData)
+    api
+      .editUserInfo(userData)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         //console.log(newUserData)
@@ -107,7 +99,8 @@ function App() {
 
   function handleUpdateAvatar(data) {
     //console.log(data)
-    api.editAvatar(data)
+    api
+      .editAvatar(data)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         //console.log(newUserData)
@@ -119,7 +112,8 @@ function App() {
   }
 
   function handleAddPlaceSubmit(data) {
-    api.postCard(data)
+    api
+      .postCard(data)
       .then((res) => {
         //console.log(res)
         setCards([res, ...cards]);
@@ -127,7 +121,7 @@ function App() {
       })
       .catch((err) => {
         console.log(`Ошибка добавления карточки: ${err}`);
-    })
+      });
   }
 
   return (
@@ -141,30 +135,37 @@ function App() {
         onCardClick={handleCardClick}
         onCardLike={handleCardLike}
         onCardDelete={handleCardDelete}
-        cards = {cards}
-        
+        cards={cards}
       />
 
       <Footer />
 
-      <ImagePopup
-        card={selectedCard}
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
       />
 
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} /> 
+      <EditAvatarPopup
+        isOpen={isAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
 
-      <EditAvatarPopup  isOpen={isAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-
-      <AddPlacePopup  isOpen={isAddImagePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+      <AddPlacePopup
+        isOpen={isAddImagePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddPlaceSubmit}
+      />
 
       {/* <DeleteImagePopup
         isOpen={isDeletePopupOpen}
         onClose={closeAllPopups}
         onCardDelete={handleCardDelete}
-        cards = {cards}
+        card = {cards}
       /> */}
-
     </CurrentUserContext.Provider>
   );
 }

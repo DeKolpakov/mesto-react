@@ -1,52 +1,67 @@
 import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function Card(props) {
-
+function Card({card, onCardClick, onCardLike, onCardDelete}) {
   const userContext = React.useContext(CurrentUserContext);
-  //console.log(userContext)
-
+  
   function handleClick() {
-    props.onCardClick(props.card);
-    //console.log(props.card)
+    onCardClick(card);
+    //console.log(card)
   }
-//_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
-  const isOwn = props.card.owner._id === userContext._id;
+  const isOwn = card.owner._id === userContext._id;
 
   function handleDeleteClick() {
-    props.onCardDelete(props.card);
+    onCardDelete(card);
   }
 
-//_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
-  const isLiked = props.card.likes.some(i => i._id === userContext._id);
+  const isLiked = card.likes.some((i) => i._id === userContext._id);
 
-  const cardLikeButtonClassName = ( 
-    `galery__button-like ${isLiked && 'galery__button-like_active'}`
-  );
+  const cardLikeButtonClassName = `galery__button-like ${
+    isLiked ? "galery__button-like_active" : ""
+  }`;
 
   function handleLikeClick() {
-    props.onCardLike(props.card)
-    //console.log(props.card)
+    onCardLike(card);
+    //console.log(card)
   }
 
-//_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
   return (
-    <template className="galery__item">
-      {isOwn && <button className="galery__button-delete" type="button" aria-label="удалить" onClick={handleDeleteClick} />}
-      <img className="galery__photo" src={props.card.link} alt={props.card.name} onClick={handleClick} />
+    <div className="galery__item">
+      {isOwn && (
+        <button
+          className="galery__button-delete"
+          type="button"
+          aria-label="удалить"
+          onClick={handleDeleteClick}
+        />
+      )}
+      <img
+        className="galery__photo"
+        src={card.link}
+        alt={card.name}
+        onClick={handleClick}
+      />
       <div className="galery__card">
-        <h2 className="galery__title">{props.card.name}</h2>
+        <h2 className="galery__title">{card.name}</h2>
         <div className="galery__like">
-          <button className={cardLikeButtonClassName} type="button" aria-label="лайк" onClick={handleLikeClick} ></button>
+          <button
+            className={cardLikeButtonClassName}
+            type="button"
+            aria-label="лайк"
+            onClick={handleLikeClick}
+          />
           <span className="galery__total-like" id="total-like">
-            {props.card.likes.length}
+            {card.likes.length}
           </span>
         </div>
       </div>
-    </template>
+    </div>
   );
 }
 

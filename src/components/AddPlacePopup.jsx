@@ -1,8 +1,7 @@
-import {React, useState} from "react";
+import {React, useEffect, useState} from "react";
 import PopupWithForm from "./PopupWithForm";
 
-export default function AddPlacePopup(props) {
-  
+export default function AddPlacePopup({isOpen, onClose, onAddPlace}) {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
@@ -16,14 +15,28 @@ export default function AddPlacePopup(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onAddPlace({
+    onAddPlace({
       name,
       link,
     });
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      setName("");
+      setLink("");
+    }
+  }, [isOpen]);
+
   return (
-    <PopupWithForm name="addimage" title="Новое место" isOpen={props.isOpen} onClose={props.onClose} buttonText="Создать" onSubmit={handleSubmit}>
+    <PopupWithForm
+      name="addimage"
+      title="Новое место"
+      isOpen={isOpen}
+      onClose={onClose}
+      buttonText="Создать"
+      onSubmit={handleSubmit}
+    >
       {
         <>
           <input
@@ -38,13 +51,18 @@ export default function AddPlacePopup(props) {
             minLength="2"
             maxLength="30"
           />
-          <span className="popup__input-span popup__input-span_error" id="image-name_error">
-            {" "}
-          </span>
-          <input className="popup__input" id="image-link" name="link" type="url" value={link} onChange={handleLinkChange} placeholder="Ссылка на картинку" required />
-          <span className="popup__input-span popup__input-span_error" id="image-link_error">
-            {" "}
-          </span>
+          <span className="popup__input-span popup__input-span_error" id="image-name_error" />
+          <input
+            className="popup__input"
+            id="image-link"
+            name="link"
+            type="url"
+            value={link}
+            onChange={handleLinkChange}
+            placeholder="Ссылка на картинку"
+            required
+          />
+          <span className="popup__input-span popup__input-span_error" id="image-link_error" />
         </>
       }
     </PopupWithForm>
