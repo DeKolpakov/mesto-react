@@ -1,20 +1,14 @@
 import React from "react";
 
 function PopupWithForm(props) {
-  //console.log(props.buttonText)
+  //console.log(props.name)
   return (
     <div className={`popup popup_type_${props.name} ${props.isOpen ? "popup_opened" : ""}`}>
       <div className={`popup__container popup__container_type_${props.name}`}>
         <h2 className="popup__title">{props.title}</h2>
         <button className="popup__button-close" type="button" onClick={props.onClose} aria-label="закрыть окно"></button>
 
-        <form
-          className={`popup__form popup__form_type_${props.name}`}
-          id={`${props.name}-form`}
-          name={`${props.name}-form`}
-          noValidate
-          method="post"
-        >
+        <form className={`popup__form popup__form_type_${props.name}`} id={`${props.name}-form`} name={`${props.name}-form`} noValidate method="post" onSubmit={props.onSubmit}>
           {props.children}
 
           <button
@@ -22,9 +16,10 @@ function PopupWithForm(props) {
             id={`submit-button-${props.name}`}
             type="submit"
             aria-label="Подтверждение"
-            disabled
+
+            //disabled
           >
-          {props.buttonText}
+            {props.buttonText || "Сохранить"}
           </button>
         </form>
       </div>

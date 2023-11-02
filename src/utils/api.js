@@ -1,5 +1,4 @@
-import { apiKey } from "./apiKey";
-
+import {apiKey} from "./apiKey";
 
 class Api {
   constructor(data) {
@@ -30,7 +29,7 @@ class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
-        about: data.description,
+        about: data.about,
       }),
     }).then((res) => this._checkResponse(res));
   }
@@ -69,7 +68,6 @@ class Api {
 
   delCard(cardId) {
     //console.log(cardId)
-    //console.log()
     return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
@@ -78,17 +76,12 @@ class Api {
 
   //_________________________________________________________________________________________
 
-  putLike(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: "PUT",
-      headers: this._headers,
-    }).then((res) => this._checkResponse(res));
-  }
-
-  deleteLike(cardId) {
+  changeLikeCardStatus(cardId, isLiked) {
     //console.log(cardId)
+    const methodLike = isLiked ? "PUT" : "DELETE";
+
     return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: "DELETE",
+      method: methodLike,
       headers: this._headers,
     }).then((res) => this._checkResponse(res));
   }
